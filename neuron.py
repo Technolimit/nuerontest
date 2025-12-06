@@ -1,5 +1,5 @@
 from neuron import h, init
-
+import matplotlib.pyplot as plt
 soma = h.Section(name='soma')
 
 soma.L = 20.0
@@ -34,3 +34,15 @@ h.v_init = -65.0
 
 h.finitialize(h.v_init)
 h.continuerun(h.tstop)
+
+
+
+plt.figure(figsize=(10, 4))
+plt.plot(t_vec, v_vec)
+plt.title('Membrane Potential vs. Time')
+plt.xlabel('Time (ms)')
+plt.ylabel('Membrane Potential (mV)')
+plt.grid(True)
+plt.show()
+
+print(f"Simulation finished. Initial V: {h.v_init} mV. Final V: {v_vec.to_python()[-1]:.2f} mV.")
