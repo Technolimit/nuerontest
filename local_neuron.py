@@ -2,6 +2,7 @@ from neuron import n
 from neuron.units import ms, mV, µm
 import matplotlib.pyplot as plt
 n.load_file("stdrun.hoc")
+
 soma = n.Section("soma")
 soma.L = 20
 soma.diam = 20
