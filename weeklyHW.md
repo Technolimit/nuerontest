@@ -12,3 +12,9 @@
 6. stimulation delay time is random
 7. plot spike timings
 8. save plot as png file
+## 12/13/2025
+1. Base random values on a seed number
+2. Turn excited synapse to inhibtaory synapse:turn reversal potential to -70\
+3. Compare models to those of the papers: If synchorinzed then no need to continue
+4. Try to use the paper sodium and potassium channels
+5. Try to use mod files 

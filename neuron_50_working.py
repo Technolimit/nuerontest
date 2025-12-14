@@ -24,11 +24,19 @@ class HHNeuron:
             seg.hh.gl = 0.0003
             seg.hh.el = -54.3  # mV
 
-        # 3. Setup recording vectors
+        # 3. Generate Synapse
+        self.syn = n.ExpSyn(self.soma(0.5))
+        self.syn.tau = 2 * ms
+
+        # 4. Setup recording vectors
         self.v_vec = n.Vector()
         self.t_vec = n.Vector()
         self.v_vec.record(self.soma(0.5)._ref_v)
         self.t_vec.record(n._ref_t)
+        self.syn_i = n.Vector()
+        self.syn_i.record(self.syn._ref_i)
+        
+
         
 
     def __del__(self):
@@ -39,49 +47,49 @@ neurons = []
 for i in range(numNeurons):
     neuron = HHNeuron(gid=i)
     neurons.append(neuron)
-    # stim = n.IClamp(neuron.soma(0.5))
-    # stim.delay = random.uniform(100, 200) * ms
-    # stim.dur = 5 * ms
-    # stim.amp = random.uniform(0.05, 0.15)  #
-    # neuron.stim = stim
-    # neuron.stim_delay = stim.delay
-    # neuron.stim_amp = stim.amp
+    stim = n.IClamp(neuron.soma(0.5))
+    stim.delay = random.uniform(100, 200) * ms
+    stim.dur = 500 * ms
+    stim.amp = random.uniform(0.05, 0.15)  #
+    neuron.stim = stim
+    neuron.stim_delay = stim.delay
+    neuron.stim_amp = stim.amp
 
-stim = n.IClamp(neurons[0].soma(0.5))
-stim.delay = 100 * ms
-stim.dur = 5 * ms
-stim.amp = 0.1  # nA
+# stim = n.IClamp(neurons[0].soma(0.5))
+# stim.delay = 100 * ms
+# stim.dur = 5 * ms
+# stim.amp = 0.1  # nA
 probability = 1
 
-stim_Syn = n.NetStim()
-stim_Syn.number = 1
-stim_Syn.start = 200 * ms
+# stim_Syn = n.NetStim()
+# stim_Syn.number = 1
+# stim_Syn.start = 200 * ms
 
-syn_e = n.ExpSyn(neurons[0].soma(0.5))
-syn_e.tau = 2 * ms
-nc_e = n.NetCon(stim_Syn, syn_e, sec=neurons[0].soma)
-nc_e.weight[0] = 0.05
-nc_e.delay = 1 * ms
+# syn_e = n.ExpSyn(neurons[0].soma(0.5))
+# syn_e.tau = 2 * ms
+# nc_e = n.NetCon(stim_Syn, syn_e, sec=neurons[0].soma)
+# nc_e.weight[0] = 0.05
+# nc_e.delay = 1 * ms
 
 syn_list = []
-syn_record_list = []
+# syn_record_list = []
 for pre in neurons:
     for post in neurons:
         if pre.gid != post.gid:
             if random.random() < probability:  # 10% connection probability
                 print("Connection from", pre.gid, "to", post.gid)
-                syn = n.ExpSyn(post.soma(0.5))
-                syn.tau = 2 * ms
-                nc = n.NetCon(pre.soma(0.5)._ref_v, syn, sec=pre.soma)
+                # syn = n.ExpSyn(post.soma(0.5))
+                # syn.tau = 2 * ms
+                nc = n.NetCon(pre.soma(0.5)._ref_v, post.syn, sec=pre.soma)
                 nc.weight[0] = 0.05
                 nc.delay = 1 * ms
                 
-                syn.e = 0 * mV  # Excitatory synapse
+                # syn.e = 0 * mV  # Excitatory synapse
                 
                 syn_list.append((pre.gid, post.gid, nc))
 
-syn_i = n.Vector()
-syn_i.record(syn._ref_i)   
+# syn_i = n.Vector()
+# syn_i.record(syn._ref_i)   
 
 spike_times = n.Vector()
 spike_gids = n.Vector()
@@ -130,7 +138,7 @@ axes[1].set_title("Network Raster Plot (Spike Timings)")
 axes[1].set_yticks(range(0, numNeurons, 5)) # Show every 5th GID
 axes[1].set_ylim(-1, numNeurons)
 
-axes[2].plot(target_neuron.t_vec, syn_i, color='m')
+axes[2].plot(target_neuron.t_vec, target_neuron.syn_i, color='m')
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
 filename = f"figures/network_simulation_results_{probability*100}%_{timestamp}.png"
