@@ -2,6 +2,7 @@ from neuron import n
 from neuron.units import ms, mV, µm
 import matplotlib.pyplot as plt
 import random
+import datetime
 n.load_file("stdrun.hoc")
 class HHNeuron: 
     def __init__(self, gid):
@@ -49,7 +50,7 @@ syn_list = []
 for pre in neurons:
     for post in neurons:
         if pre.gid != post.gid:
-            if random.random() < 0.1:  # 10% connection probability
+            if random.random() < 1:  # 100% connection probability
                 syn = n.ExpSyn(post.soma(0.5))
                 syn.tau = 2 * ms
                 nc = n.NetCon(pre.soma(0.5)._ref_v, syn, sec=pre.soma)
@@ -102,9 +103,12 @@ axes[1].set_title("Network Raster Plot (Spike Timings)")
 axes[1].set_yticks(range(0, numNeurons, 5)) # Show every 5th GID
 axes[1].set_ylim(-1, numNeurons)
 
+timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
+filename = f"network_simulation_results_{timestamp}.png"
+
 plt.tight_layout(rect=[0, 0, 1, 0.96]) 
 
-plt.savefig("network_simulation_results.png")
+plt.savefig(filename)
 plt.show()
 
 print("\nResults saved to 'network_simulation_results.png'")
