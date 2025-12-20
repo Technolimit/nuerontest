@@ -27,7 +27,7 @@ class HHNeuron:
         # 3. Generate Synapse
         self.syn = n.ExpSyn(self.soma(0.5))
         self.syn.tau = 2 * ms
-        # self.syn.e = -70  # mV
+        self.syn.e = -70  # mV
 
         # 4. Setup recording vectors
         self.v_vec = n.Vector()
@@ -43,7 +43,7 @@ class HHNeuron:
     def __del__(self):
         del self.soma
 
-# random.seed(67890)
+random.seed(67890)
 numNeurons = 50;
 neurons = []
 for i in range(numNeurons):
