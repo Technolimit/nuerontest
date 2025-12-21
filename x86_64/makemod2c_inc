@@ -1,8 +1,24 @@
+kdr.cpp: ../kdr.mod $(NOCMODL)
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kdr.mod"  -o "/home/ethan/nuerontest/x86_64" )
+
+./kdr.o: kdr.cpp
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) /home/ethan/nuerontest/x86_64/$<\\n"
+	$(CXXCOMPILE) -I".." $(INCLUDES) -fPIC -c "/home/ethan/nuerontest/x86_64/$<" -o $@
+
 naf.cpp: ../naf.mod $(NOCMODL)
 	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
 	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "naf.mod"  -o "/home/ethan/nuerontest/x86_64" )
 
 ./naf.o: naf.cpp
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) /home/ethan/nuerontest/x86_64/$<\\n"
+	$(CXXCOMPILE) -I".." $(INCLUDES) -fPIC -c "/home/ethan/nuerontest/x86_64/$<" -o $@
+
+vecst.cpp: ../vecst.mod $(NOCMODL)
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "vecst.mod"  -o "/home/ethan/nuerontest/x86_64" )
+
+./vecst.o: vecst.cpp
 	@printf " -> $(C_GREEN)Compiling$(C_RESET) /home/ethan/nuerontest/x86_64/$<\\n"
 	$(CXXCOMPILE) -I".." $(INCLUDES) -fPIC -c "/home/ethan/nuerontest/x86_64/$<" -o $@
 

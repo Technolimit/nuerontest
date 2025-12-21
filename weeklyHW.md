@@ -18,3 +18,7 @@
 3. Compare models to those of the papers: If synchorinzed then no need to continue
 4. Try to use the paper sodium and potassium channels
 5. Try to use mod files 
+## 12/20/2025
+1. Try match current injection and variation to the paper
+2. Change cell size to model
+3. Try to add synapse mod file 

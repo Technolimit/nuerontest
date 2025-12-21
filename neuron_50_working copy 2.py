@@ -1,3 +1,4 @@
+#Trying to replicate the network simulation as shown in the Wang and Buzsaki paper
 from neuron import n
 from neuron import h, load_mechanisms
 from neuron.units import ms, mV, µm
@@ -20,14 +21,16 @@ class HHNeuron:
         
         # 2. Insert Hodgkin-Huxley biophysics ('hh')
         self.soma.insert("hh")
-        # self.soma.insert("kdr")
-        # self.soma.insert("naf")
+        self.soma.insert("kdr")
+        self.soma.insert("naf")
         # Set parameters for the hh mechanism
         for seg in self.soma:
-            seg.hh.gnabar = 0.12 
-            seg.hh.gkbar = 0.036 
-            seg.hh.gl = 0.0003
-            seg.hh.el = -54.3  # mV
+            # seg.hh.gnabar = 0.12 
+            # seg.hh.gkbar = 0.036 
+            seg.naf.g = 0.035  # mS/cm^2
+            seg.kdr.g = 0.009  # mS/cm^2
+            seg.hh.gl = 0.0001
+            seg.hh.el = -65  # mV
 
         # 3. Generate Synapse
         self.syn = n.ExpSyn(self.soma(0.5))
@@ -55,14 +58,14 @@ for i in range(numNeurons):
     neuron = HHNeuron(gid=i)
     neurons.append(neuron)
     stim = n.IClamp(neuron.soma(0.5))
-    stim.delay = 1.0 * ms
+    stim.delay = 50.0 * ms
     stim.dur = 500 * ms
     stim.amp = random.uniform(0.05, 0.15)  #
     neuron.stim = stim
     neuron.stim_delay = stim.delay
     neuron.stim_amp = stim.amp
 
-probability = 1
+probability = 0.1
 
 
 syn_list = []
@@ -72,7 +75,7 @@ for pre in neurons:
             if random.random() < probability: 
                 # print("Connection from", pre.gid, "to", post.gid)
                 nc = n.NetCon(pre.soma(0.5)._ref_v, post.syn, sec=pre.soma)
-                nc.weight[0] = 0.0000
+                nc.weight[0] = 0.00001
                 nc.delay = 1 * ms
 
                 
@@ -87,7 +90,7 @@ for neuron in neurons:
     spike_detector.record(spike_times, spike_gids, neuron.gid)
     neuron.spike_detector = spike_detector
 
-T_STOP = 500  # ms
+T_STOP = 600  # ms
 n.finitialize(-52) # Initialize V_m to -65 mV
 n.t = 0
 n.dt = 0.025 # Smaller time step for accuracy
