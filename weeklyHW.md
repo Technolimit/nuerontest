@@ -22,3 +22,8 @@
 1. Try match current injection and variation to the paper
 2. Change cell size to model
 3. Try to add synapse mod file 
+## 12/26/2025
+1. Make all neurons recieve excitory synaptic input(short)
+2. Check if synchronized
+3. Neurons/synapse recieve poison random distriubtion timings input
+3. 10 hertz mean input frequency

@@ -1,4 +1,4 @@
-#Trying to replicate the network simulation as shown in the Wang and Buzsaki paper
+#Mimic Fig 3c
 from neuron import n
 from neuron import h, load_mechanisms
 from neuron.units import ms, mV, µm
@@ -58,9 +58,10 @@ for i in range(numNeurons):
     neuron = HHNeuron(gid=i)
     neurons.append(neuron)
     stim = n.IClamp(neuron.soma(0.5))
-    stim.delay = 50.0 * ms
-    stim.dur = 500 * ms
-    stim.amp = random.uniform(0.05, 0.15)  #
+    # stim.delay = 50.0 * ms
+    stim.dur = 1e9 * ms
+    # stim.amp = 10*400*n.PI/1e5
+    stim.amp = 0
     neuron.stim = stim
     neuron.stim_delay = stim.delay
     neuron.stim_amp = stim.amp
@@ -75,7 +76,7 @@ for pre in neurons:
             if random.random() < probability: 
                 # print("Connection from", pre.gid, "to", post.gid)
                 nc = n.NetCon(pre.soma(0.5)._ref_v, post.syn, sec=pre.soma)
-                nc.weight[0] = 500
+                nc.weight[0] = 0.001
                 nc.delay = 1 * ms
 
                 
@@ -91,7 +92,9 @@ for neuron in neurons:
     neuron.spike_detector = spike_detector
 
 T_STOP = 600  # ms
-n.finitialize(-52) # Initialize V_m to -65 mV
+for neuron in neurons:
+    neuron.soma.v = random.uniform(-68, -55)
+n.finitialize() # Initialize V_m to -65 mV
 n.t = 0
 n.dt = 0.025 # Smaller time step for accuracy
 t = n.Vector().record(n._ref_t)
