@@ -127,7 +127,7 @@ t_list = list(spike_times)
 gid_list = list(spike_gids)
 
 plt.style.use('seaborn-v0_8-whitegrid')
-fig, axes = plt.subplots(3, 1, figsize=(12, 10), sharex=True)
+fig, axes = plt.subplots(4, 1, figsize=(12, 10), sharex=False)
 fig.suptitle(f'Network Simulation ({numNeurons} HH Neurons)', fontsize=16)
 
 # --- Subplot 1: 6. Plot Membrane Potential of a Sample Neuron ---
@@ -155,28 +155,43 @@ v_avg = np.mean(v_all, axis=0)
 
 # Synchrony Index (k): Variance of average / Average of variances
 sync_index = np.var(v_avg) / np.mean(np.var(v_all, axis=1))
-v_normalized = v_all - v_avg
-yf = np.fft.fft(v_normalized)
-xf = np.fft.fftfreq(len(v_normalized), d=n.dt/1000)  # Convert dt from ms to s for frequency calculation
-magnitude = np.abs(yf) * 2 / len(v_normalized)
 
+v_normalized = v_avg - np.mean(v_avg)
+# v_normalized = v_avg
+N = len(v_normalized)
+yf = np.fft.fft(v_normalized)
+xf = np.fft.fftfreq(N, d=n.dt/1000)  # Convert dt from ms to s for frequency calculation
+magnitude = np.abs(yf) * 2 / N
+
+mask = (xf >= 1) & (xf <= 400) # Filters out the 0Hz spike and high noise
+xf_plot = xf[mask]
+# print(xf_plot)
+mag_plot = magnitude[mask]
+print(mag_plot)
 # --- Subplot 3: 8. Plot Population Mean Membrane Potential ---
 axes[2].plot(neurons[0].t_vec, v_avg, color='r')
 axes[2].set_ylabel("Avg Vm (mV)")
 axes[2].set_title(f"Population Mean (Sync Index: {sync_index:.3f})")
 axes[2].set_xlabel("Time (ms)")
-timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H:%M:%S")
-filename = f"figures/network_simulation_results_{probability*100}%_{timestamp}.png"
+timestamp = datetime.datetime.now().strftime("%Y-%m-%d")
+weight = syn_list[0][2].weight[0] if syn_list else 0
+excWeight = all_stims[0][1].weight[0] if all_stims else 0
+maxFreq = mag_plot[np.argmax(mag_plot)]
+maxFreq = str(maxFreq)[:5]
+# print(weight, excWeight)
+
 
 plt.tight_layout(rect=[0, 0, 1, 0.96]) 
 # plt.savefig(filename)
-fig2, axes2 = plt.subplots(2, 1, figsize=(12, 10), sharex=True)
-fig2.suptitle(f'Network Simulation ({numNeurons} HH Neurons)', fontsize=16)
-axes2[0].plot(xf, magnitude, color='m')
-axes2[0].set_ylabel("Amplitude")
-axes2[0].set_xlabel("Frequency (Hz)")
-axes2[0].set_title("FFT of Population Mean Membrane Potential")
-axes2[0].set_xlim(-50, 100)  # Focus on 0-100 Hz range
+
+fig.suptitle(f'Network Simulation ({numNeurons} HH Neurons)', fontsize=16)
+axes[3].plot(xf_plot, mag_plot, color='m')
+axes[3].set_xlim(0, 400)
+axes[3].set_ylabel("Amplitude")
+axes[3].set_xlabel("Frequency (Hz)")
+axes[3].set_title("FFT of Population Mean Membrane Potential")
+filename = f"figures/simulation_results_{probability*100}%_{timestamp}-inhib+exc{weight}-{excWeight}maxFrequency{maxFreq}.png"
+plt.savefig(filename)
 # plt.grid(True)
 plt.show()
 

@@ -27,3 +27,6 @@
 2. Check if synchronized
 3. Neurons/synapse recieve poison random distriubtion timings input
 3. 10 hertz mean input frequency
+## 1/17/2026
+1. Correct save filename, combine graphs, find peak and put in title
+2. Check what changes the spikes: exitory weight and inhibitory weight, inhibitory decay time, synapse connection probability: Plot them on graph
