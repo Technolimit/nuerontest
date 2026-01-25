@@ -189,7 +189,7 @@ axes[3].plot(xf_plot, mag_plot, color='m')
 axes[3].set_xlim(0, 400)
 axes[3].set_ylabel("Amplitude")
 axes[3].set_xlabel("Frequency (Hz)")
-axes[3].set_title("FFT of Population Mean Membrane Potential")
+axes[3].set_title(f"FFT of Population Mean Membrane Potential, Max Frequency{maxFreq}Hz")
 filename = f"figures/simulation_results_{probability*100}%_{timestamp}-inhib+exc{weight}-{excWeight}maxFrequency{maxFreq}.png"
 plt.savefig(filename)
 # plt.grid(True)
