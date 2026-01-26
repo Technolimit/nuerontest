@@ -30,3 +30,10 @@
 ## 1/17/2026
 1. Correct save filename, combine graphs, find peak and put in title
 2. Check what changes the spikes: exitory weight and inhibitory weight, inhibitory decay time, synapse connection probability: Plot them on graph
+## 1/25/2026
+1. Save all figures of combination
+2. Synchronization figure
+3. See physiology range(Use online papers)
+4. Add short term depression(Current synapses are constant(same weight), real synapses have depression(filling and releasing of chemical))-Model DB
+5. Use 2 exponential short depression synapse for both exitory and inhibitory
+6. Plot with different weights
