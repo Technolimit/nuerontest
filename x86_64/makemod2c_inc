@@ -1,3 +1,19 @@
+FDSExp2Syn.cpp: ../FDSExp2Syn.mod $(NOCMODL)
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "FDSExp2Syn.mod"  -o "/home/ethan/nuerontest/x86_64" )
+
+./FDSExp2Syn.o: FDSExp2Syn.cpp
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) /home/ethan/nuerontest/x86_64/$<\\n"
+	$(CXXCOMPILE) -I".." $(INCLUDES) -fPIC -c "/home/ethan/nuerontest/x86_64/$<" -o $@
+
+exp2test.cpp: ../exp2test.mod $(NOCMODL)
+	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
+	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "exp2test.mod"  -o "/home/ethan/nuerontest/x86_64" )
+
+./exp2test.o: exp2test.cpp
+	@printf " -> $(C_GREEN)Compiling$(C_RESET) /home/ethan/nuerontest/x86_64/$<\\n"
+	$(CXXCOMPILE) -I".." $(INCLUDES) -fPIC -c "/home/ethan/nuerontest/x86_64/$<" -o $@
+
 kdr.cpp: ../kdr.mod $(NOCMODL)
 	@printf " -> $(C_GREEN)NMODL$(C_RESET) $<\\n"
 	(cd "..";  MODLUNIT=$(NRNUNITS) $(NOCMODL) "kdr.mod"  -o "/home/ethan/nuerontest/x86_64" )
