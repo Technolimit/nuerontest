@@ -1,13 +1,13 @@
 #Mimic Fig 3c
 import numpy as np
-from neuron import n, h, load_mechanisms
+from neuron import n, h
 from neuron.units import ms, mV, µm
 import matplotlib.pyplot as plt
 import pickle as pl
 import random
 import datetime
 n.load_file("stdrun.hoc")
-load_mechanisms(".")
+# load_mechanisms(".")
 class HHNeuron: 
     def __init__(self, gid):
         self.gid = gid 
